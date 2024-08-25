@@ -1,11 +1,12 @@
-import { View, Text, ScrollView, StyleSheet, Button, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native'
+import React, { useEffect } from 'react'
 import SearchBar from './VocabView/SearchBar'
 import Record from './VocabView/Record'
 import { Colors } from '@/constants/Colors'
 import { SplashScreen } from 'expo-router'
 import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native'
+import { useSharedState } from '@/constants/Cntxt'
 
 const index = () => {
 
@@ -28,7 +29,8 @@ const index = () => {
 
     if(!fontsLoaded && !error){return null}
 
-    const [word, setWord] = React.useState<string[]>(['abc','def','ghi','jkl','mno','pqr','stu','vwx','yz'])
+    //Data taken from global context
+    const {word} = useSharedState()
 
   return (
     <View style={styles.container}>
@@ -43,7 +45,7 @@ const index = () => {
         }
       </ScrollView>
         <Pressable onPress={() => navigation.navigate('add' as never)}>
-            <View style={styles.button}>
+            <View style ={styles.button}>
                 <Text style={styles.buttonText}>+</Text>
             </View>
         </Pressable>

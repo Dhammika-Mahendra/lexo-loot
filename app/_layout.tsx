@@ -7,6 +7,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import index from './index';
 import add from './add';
+import React from 'react';
+import { RecordSet } from '@/constants/DataTypes';
+import { Cntxt } from '@/constants/Cntxt';
 
 const Stack = createStackNavigator();
 
@@ -30,11 +33,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator>
-        <Stack.Screen name="index" component={index} />
-        <Stack.Screen name="add" component={add} />
-      </Stack.Navigator>
-    </ThemeProvider>
+      <Cntxt>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack.Navigator>
+            <Stack.Screen name="index" component={index} />
+            <Stack.Screen name="add" component={add} />
+          </Stack.Navigator>
+        </ThemeProvider>
+      </Cntxt>
   );
 }
