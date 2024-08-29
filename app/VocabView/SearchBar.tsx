@@ -8,9 +8,11 @@ const SearchBar = () => {
         style={{
           height: 40,
           borderColor: 'gray',
-          borderWidth: 1
+          borderWidth: 1,
+          borderRadius:5,
+          marginBottom:10
         }}
-        placeholder="Search for a word"></TextInput>
+        placeholder="Search"></TextInput>
     </View>
   )
 }

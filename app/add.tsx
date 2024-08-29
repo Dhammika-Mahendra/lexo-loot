@@ -5,7 +5,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import { useSharedState } from '@/constants/Cntxt'
 import { useNavigation } from '@react-navigation/native'
 
-const add = () => {
+const Add = () => {
   const navigate=useNavigation()
 
   const {word, setWord} = useSharedState()
@@ -26,7 +26,7 @@ const add = () => {
   )
 }
 
-export default add
+export default Add
 
 const styles = StyleSheet.create({
     container:{

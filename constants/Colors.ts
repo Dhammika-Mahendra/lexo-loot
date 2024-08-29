@@ -19,4 +19,10 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
   },
+  main:{
+    background:'#fafafa',
+    add:'#0289ba',
+    recordBG:'#ffffff',
+    recordBorder:'#e0e0e0'
+  }
 };

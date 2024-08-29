@@ -1,16 +1,18 @@
-import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native'
-import React, { useEffect } from 'react'
+import { View,ScrollView, StyleSheet, Pressable } from 'react-native'
+import React, { useEffect} from 'react'
 import SearchBar from './VocabView/SearchBar'
 import Record from './VocabView/Record'
 import { Colors } from '@/constants/Colors'
 import { SplashScreen } from 'expo-router'
 import { useFonts } from 'expo-font'
-import { useNavigation } from '@react-navigation/native'
 import { useSharedState } from '@/constants/Cntxt'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { IndexProps } from '@/constants/DataTypes'
 
-const index = () => {
+const Index : React.FC<IndexProps>= ({navigation}) => {
 
-    const navigation = useNavigation()
+    //Data taken from global context
+    const {word} = useSharedState()
 
     const [fontsLoaded, error] = useFonts({
         "Roboto-Regular": require('../assets/fonts/Roboto/Roboto-Regular.ttf'),
@@ -20,17 +22,17 @@ const index = () => {
         "Roboto-Medium": require('../assets/fonts/Roboto/Roboto-Medium.ttf'),
         "Roboto-Thin": require('../assets/fonts/Roboto/Roboto-Thin.ttf')
     })
+
+    
     useEffect(() => {
         if(error){throw new Error("Fonts not loaded")}
         if(fontsLoaded){
             SplashScreen.hideAsync()
         }
+
     },[fontsLoaded, error])
 
     if(!fontsLoaded && !error){return null}
-
-    //Data taken from global context
-    const {word} = useSharedState()
 
   return (
     <View style={styles.container}>
@@ -39,34 +41,34 @@ const index = () => {
         {
             word.map((item, index) => {
                 return (
-                    <Record key={index} data={item}></Record>
+                    <Record key={index} word={item} navigation={navigation}></Record>
                 )
             })
         }
       </ScrollView>
         <Pressable onPress={() => navigation.navigate('add' as never)}>
             <View style ={styles.button}>
-                <Text style={styles.buttonText}>+</Text>
+            <FontAwesome6 name="add" size={24} color="white" />
             </View>
         </Pressable>
     </View>
   )
 }
 
-export default index
+export default Index
 
 const styles = StyleSheet.create({
     container:{
         width: '100%',
         height: '100%',
         padding: 10,
-        backgroundColor: Colors.light.background
+        backgroundColor: Colors.main.background
     },
     button:{
         position: 'absolute',
         bottom: 20,
         right: 20,
-        backgroundColor: 'lightblue',
+        backgroundColor: Colors.main.add,
         padding: 10,
         width: 50, 
         height: 50,

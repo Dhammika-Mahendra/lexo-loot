@@ -8,10 +8,11 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import index from './index';
 import add from './add';
 import React from 'react';
-import { RecordSet } from '@/constants/DataTypes';
 import { Cntxt } from '@/constants/Cntxt';
+import RecordView from './RecordView';
+import { RootStackProps } from '@/constants/DataTypes';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackProps>();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -38,6 +39,7 @@ export default function RootLayout() {
           <Stack.Navigator>
             <Stack.Screen name="index" component={index} />
             <Stack.Screen name="add" component={add} />
+            <Stack.Screen name="RecordView" component={RecordView} />
           </Stack.Navigator>
         </ThemeProvider>
       </Cntxt>
