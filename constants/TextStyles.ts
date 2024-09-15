@@ -8,8 +8,7 @@ export const textStyles = StyleSheet.create({
   },
   recordTitle:{
     fontSize: 20,
-    fontWeight: 'bold',
-    fontFamily: 'Roboto-Thin',
+    fontWeight: 'regular',
     color: 'black'  
   }
 });

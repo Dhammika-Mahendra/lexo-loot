@@ -1,5 +1,5 @@
 import { View,ScrollView, StyleSheet, Pressable } from 'react-native'
-import React, { useEffect} from 'react'
+import React, { useEffect, useState} from 'react'
 import SearchBar from './VocabView/SearchBar'
 import Record from './VocabView/Record'
 import { Colors } from '@/constants/Colors'
@@ -8,11 +8,13 @@ import { useFonts } from 'expo-font'
 import { useSharedState } from '@/constants/Cntxt'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { IndexProps } from '@/constants/DataTypes'
+import { createTable, db, deleteAllRecords, getRecords, insertRecord } from '@/constants/DataBase'
 
 const Index : React.FC<IndexProps>= ({navigation}) => {
 
     //Data taken from global context
     const {word} = useSharedState()
+
 
     const [fontsLoaded, error] = useFonts({
         "Roboto-Regular": require('../assets/fonts/Roboto/Roboto-Regular.ttf'),
@@ -23,13 +25,59 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
         "Roboto-Thin": require('../assets/fonts/Roboto/Roboto-Thin.ttf')
     })
 
-    
+    interface Record {
+        id: number;
+        word: string;
+      }
+
+    const [wordList, setWordList] = React.useState<Record[]>([])
+
+              // Add sample data
+    const sampleWords = [
+        'DEF',
+        'GHI',
+        'MNO',
+        'PQR',
+        'STU'
+    ];
+      
+    const fetchWords = () => {
+        db.transaction(tx => {
+          tx.executeSql('SELECT * FROM records', [], (_, { rows }) => {
+            setWordList(rows._array);
+            console.log(JSON.stringify(rows._array));
+          });
+        });
+      }
+
     useEffect(() => {
         if(error){throw new Error("Fonts not loaded")}
         if(fontsLoaded){
             SplashScreen.hideAsync()
         }
 
+        db.transaction(tx => {
+            tx.executeSql(
+              'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT)'
+            );
+          });   
+    
+          db.transaction(tx => {
+            // Clear existing records
+            tx.executeSql('DELETE FROM records');
+      
+            // Insert sample words
+            sampleWords.forEach(item => {
+              tx.executeSql('INSERT INTO records (word) VALUES (?)', [item]);
+            });
+          }, (error) => {
+            console.log('Transaction error: ', error);
+          }, () => {
+            console.log('Transaction completed');
+            fetchWords();
+          });
+
+    console.log('use effect');
     },[fontsLoaded, error])
 
     if(!fontsLoaded && !error){return null}
@@ -39,9 +87,9 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
     <SearchBar></SearchBar>
       <ScrollView>
         {
-            word.map((item, index) => {
+            wordList.map((item, index) => {
                 return (
-                    <Record key={index} word={item} navigation={navigation}></Record>
+                    <Record key={index} word={item.word} navigation={navigation}></Record>
                 )
             })
         }

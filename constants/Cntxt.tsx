@@ -6,9 +6,10 @@ const MyDataContext = createContext<MyDataContextType | undefined>(undefined);
 export const Cntxt: React.FC<{children : ReactNode}> = ({ children }) => {
   
   const [word, setWord] = useState<RecordSet>(['abc', 'def', 'ghi', 'jkl', 'mno', 'pqr', 'stu', 'vwx', 'yz']);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   return (
-    <MyDataContext.Provider value={{ word, setWord }}>
+    <MyDataContext.Provider value={{ word, setWord, modalVisible,setModalVisible}}>
       {children}
     </MyDataContext.Provider>
   );

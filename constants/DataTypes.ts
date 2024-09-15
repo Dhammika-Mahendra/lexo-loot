@@ -8,6 +8,8 @@ export type RecordSet=string[]
 export interface MyDataContextType{
     word: RecordSet;
     setWord: React.Dispatch<React.SetStateAction<RecordSet>>;
+    modalVisible:boolean;
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 

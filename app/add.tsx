@@ -20,7 +20,7 @@ const Add = () => {
   return (
     <View style={styles.container}>
       <Text>Add new word</Text>
-      <TextInput onChangeText={(e)=>setNewWord(e)}></TextInput>
+      <TextInput onChangeText={(e)=>setNewWord(e)} style={styles.input}></TextInput>
       <Button title="Add" onPress={addWord}></Button>
     </View>
   )
@@ -34,5 +34,12 @@ const styles = StyleSheet.create({
         height: '100%',
         padding: 10,
         backgroundColor: Colors.light.background
+    },
+    input:{
+      height: 40,
+      borderColor: 'gray',
+      borderWidth: 1,
+      borderRadius:5,
+      marginBottom:10,
     }
 })
