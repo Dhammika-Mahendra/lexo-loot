@@ -1,4 +1,4 @@
-import { View,ScrollView, StyleSheet, Pressable } from 'react-native'
+import { View,ScrollView, StyleSheet, Pressable, Text } from 'react-native'
 import React, { useEffect, useState} from 'react'
 import SearchBar from './VocabView/SearchBar'
 import Record from './VocabView/Record'
@@ -8,7 +8,7 @@ import { useFonts } from 'expo-font'
 import { useSharedState } from '@/constants/Cntxt'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { IndexProps } from '@/constants/DataTypes'
-import { createTable, db, deleteAllRecords, getRecords, insertRecord } from '@/constants/DataBase'
+import { clearAndPopulateDatabase, initializeDatabase , fetchWords} from '@/constants/DataBase'
 
 const Index : React.FC<IndexProps>= ({navigation}) => {
 
@@ -30,6 +30,7 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
         word: string;
       }
 
+    const [isLoading, setIsLoading] = useState(true)
     const [wordList, setWordList] = React.useState<Record[]>([])
 
               // Add sample data
@@ -41,41 +42,36 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
         'STU'
     ];
       
-    const fetchWords = () => {
-        db.transaction(tx => {
-          tx.executeSql('SELECT * FROM records', [], (_, { rows }) => {
-            setWordList(rows._array);
-            console.log(JSON.stringify(rows._array));
-          });
-        });
+    useEffect(() => {
+
+      const setupDatabase = async () => {
+        try {
+          setIsLoading(true)
+          console.log("Initializing database...")
+          await initializeDatabase()
+          console.log("Database initialized")
+  
+          console.log("Clearing and populating database...")
+          await clearAndPopulateDatabase(sampleWords)
+          console.log("Database populated")
+  
+          console.log("Fetching words...")
+          const words = await fetchWords()
+          console.log("Words fetched:", words)
+  
+          setWordList(words)
+          setIsLoading(false)
+        } catch (error) {
+          console.error('Error setting up database:', error)
+          setIsLoading(false)
+        }
       }
 
-    useEffect(() => {
         if(error){throw new Error("Fonts not loaded")}
         if(fontsLoaded){
             SplashScreen.hideAsync()
+            setupDatabase()
         }
-
-        db.transaction(tx => {
-            tx.executeSql(
-              'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT)'
-            );
-          });   
-    
-          db.transaction(tx => {
-            // Clear existing records
-            tx.executeSql('DELETE FROM records');
-      
-            // Insert sample words
-            sampleWords.forEach(item => {
-              tx.executeSql('INSERT INTO records (word) VALUES (?)', [item]);
-            });
-          }, (error) => {
-            console.log('Transaction error: ', error);
-          }, () => {
-            console.log('Transaction completed');
-            fetchWords();
-          });
 
     console.log('use effect');
     },[fontsLoaded, error])
@@ -86,7 +82,7 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
     <View style={styles.container}>
     <SearchBar></SearchBar>
       <ScrollView>
-        {
+        {isLoading ? <View><Text>Loading...</Text></View> :
             wordList.map((item, index) => {
                 return (
                     <Record key={index} word={item.word} navigation={navigation}></Record>

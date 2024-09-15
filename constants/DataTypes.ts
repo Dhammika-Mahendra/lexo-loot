@@ -12,6 +12,13 @@ export interface MyDataContextType{
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+//Database data types =============================================================
+
+//Record
+export interface Record{
+    id:number;
+    word:string;
+}
 
 
 //Navigation data types =============================================================
@@ -28,16 +35,19 @@ export interface RootStackProps{
 export interface IndexProps{
     navigation:StackNavigationProp<RootStackProps, 'index'>;
 }
-//------Record component
+
+//Record component
 export interface RecordProps{
     word: string;
     navigation:StackNavigationProp<RootStackProps, 'index'>;
 }
 
+
 //Record view screen
 export interface RecordViewProps{
     route:RouteProp<RootStackProps, 'RecordView'>;
 }
+
 
 
 
