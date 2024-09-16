@@ -12,8 +12,7 @@ import { Cntxt} from '@/constants/Cntxt';
 import RecordView from './RecordView';
 import { RootStackProps } from '@/constants/DataTypes';
 import FilterModal from './VocabView/FilterModal';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { clearAndPopulateDatabase, initializeDatabase } from '@/constants/DataBase';
+import { clearAndPopulateDatabase, initializeDatabase, showId } from '@/constants/DataBase';
 import { Text } from 'react-native';
 
 const Stack = createStackNavigator<RootStackProps>();
@@ -32,7 +31,7 @@ export default function RootLayout() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    
+
     const sampleWords = ['DEF','GHI','MNO','PQR','STU']
     
     const dbSetup = async () => {
@@ -66,17 +65,10 @@ export default function RootLayout() {
       <Cntxt>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           {isLoading ? <Text>Loading...</Text>:            
-          <Stack.Navigator>
+          <Stack.Navigator screenOptions={{headerShown: false}}>
               <Stack.Screen name="index" component={index} options={{headerStyle:{height:50}}}/>
               <Stack.Screen name="add" component={add} options={{headerStyle:{height:50}}}/>
-              <Stack.Screen name="RecordView" component={RecordView} 
-                options={{
-                    headerStyle:{height:50},
-                    headerRight: () => (
-                      <AntDesign name="edit" size={24} color="black" style={{ marginRight: 25 }} />
-                    )
-                  }}
-              />
+              <Stack.Screen name="RecordView" component={RecordView} options={{headerStyle:{height:50}}}/>
             </Stack.Navigator>}
             <FilterModal></FilterModal>
         </ThemeProvider>

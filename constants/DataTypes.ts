@@ -27,7 +27,7 @@ export interface record{
 export interface RootStackProps{
     index:undefined;
     add:undefined;
-    RecordView:{word:string};
+    RecordView:{elem:record,nav:StackNavigationProp<RootStackProps, 'index'>};
     [key: string]: undefined | object;
 }
 
@@ -38,7 +38,7 @@ export interface IndexProps{
 
 //Record component
 export interface RecordProps{
-    word: string;
+    element: record;
     navigation:StackNavigationProp<RootStackProps, 'index'>;
 }
 
@@ -46,8 +46,15 @@ export interface RecordProps{
 //Record view screen
 export interface RecordViewProps{
     route:RouteProp<RootStackProps, 'RecordView'>;
+    navigation:StackNavigationProp<RootStackProps, 'index'>;
 }
 
+
+//Header
+export interface HeaderProps{
+    id:number;
+    navigation:StackNavigationProp<RootStackProps, 'index'>;
+}
 
 
 

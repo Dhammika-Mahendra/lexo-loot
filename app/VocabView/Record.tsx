@@ -4,12 +4,12 @@ import { Colors } from '@/constants/Colors';
 import { textStyles } from '@/constants/TextStyles';
 import { RecordProps } from '@/constants/DataTypes';
 
-const Record: React.FC<RecordProps> = ({word,navigation}) => {
+const Record: React.FC<RecordProps> = ({element,navigation}) => {
 
     return (
-        <Pressable onPress={()=>navigation.navigate('RecordView',{word})} >
+        <Pressable onPress={()=>navigation.navigate('RecordView',{elem:element,nav:navigation})} >
             <View style={styles.Record}>
-                <Text style={textStyles.recordTitle} >{word}</Text>
+                <Text style={textStyles.recordTitle} >{element.word}</Text>
             </View>
         </Pressable>
     );

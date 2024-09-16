@@ -24,5 +24,8 @@ export const Colors = {
     add:'#0289ba',
     recordBG:'#ffffff',
     recordBorder:'#e0e0e0'
+  },
+  header:{
+    background:'#ffffff'
   }
 };

@@ -2,6 +2,7 @@ import * as SQLite from 'expo-sqlite/legacy';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import { record } from './DataTypes';
+import { NavigationProp } from '@react-navigation/native';
 
 
 // First Method ========================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -47,6 +48,10 @@ import { record } from './DataTypes';
   };
   
 
+  export const showId = (navigation: NavigationProp<any>,id: number): void => {
+    console.log('ID:', id);
+  }
+
   export const fetchWords = (): Promise<record[]> => {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
@@ -72,6 +77,30 @@ import { record } from './DataTypes';
         },
         (_, error) => {
           console.log('Error inserting word:', error);
+          callback(false);
+          return false;
+        }
+      );
+    });
+  };
+
+
+  export const deleteWordById = (id: number, callback: (success: boolean) => void): void => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'DELETE FROM records WHERE id = ?',
+        [id],
+        (_, result) => {
+          if (result.rowsAffected > 0) {
+            console.log('Word deleted successfully. ID:', id);
+            callback(true);
+          } else {
+            console.log('No word found with ID:', id);
+            callback(false);
+          }
+        },
+        (_, error) => {
+          console.log('Error deleting word:', error);
           callback(false);
           return false;
         }

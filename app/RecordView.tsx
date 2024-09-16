@@ -1,15 +1,22 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { RecordViewProps } from '@/constants/DataTypes'
+import HeadComp from './Header/HeadComp'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const RecordView :React.FC<RecordViewProps>= ({route}) => {
 
-  const {word} = route.params
+  const {elem} = route.params
+  const {nav} = route.params
 
   return (
-    <View>
-      <Text>This is {word}</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <HeadComp id={elem.id} navigation={nav}></HeadComp>
+        <Text>Id:{elem.id}</Text>
+        <Text>This is {elem.word}</Text>
+      </View>
+    </SafeAreaView>
   )
 }
 

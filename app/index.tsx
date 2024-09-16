@@ -10,6 +10,7 @@ import { IndexProps, record } from '@/constants/DataTypes'
 import {fetchWords} from '@/constants/DataBase'
 import { useFocusEffect } from '@react-navigation/native'
 import Record from './VocabView/Record'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Index : React.FC<IndexProps>= ({navigation}) => {
 
@@ -61,23 +62,25 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
 
 
   return (
-    <View style={styles.container}>
-    <SearchBar></SearchBar>
-      <ScrollView>
-        {isLoading ? <View><Text>Loading...</Text></View> :
-            wordList.map((item, index) => {
-                return (
-                    <Record key={index} word={item.word} navigation={navigation}></Record>
-                )
-            })
-        }
-      </ScrollView>
-        <Pressable onPress={() => navigation.navigate('add' as never)}>
-            <View style ={styles.button}>
-            <FontAwesome6 name="add" size={24} color="white" />
-            </View>
-        </Pressable>
-    </View>
+    <SafeAreaView>
+      <View style={styles.container}>
+      <SearchBar></SearchBar>
+        <ScrollView>
+          {isLoading ? <View><Text>Loading...</Text></View> :
+              wordList.map((item, index) => {
+                  return (
+                      <Record key={index} element={item} navigation={navigation}></Record>
+                  )
+              })
+          }
+        </ScrollView>
+          <Pressable onPress={() => navigation.navigate('add' as never)}>
+              <View style ={styles.button}>
+              <FontAwesome6 name="add" size={24} color="white" />
+              </View>
+          </Pressable>
+      </View>
+    </SafeAreaView>
   )
 }
 
