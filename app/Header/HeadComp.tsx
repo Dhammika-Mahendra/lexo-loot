@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import { Colors } from '@/constants/Colors'
-import AntDesign from '@expo/vector-icons/AntDesign';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { HeaderProps } from '@/constants/DataTypes';
 import { deleteWordById } from '@/constants/DataBase';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const HeadComp:React.FC<HeaderProps> = ({id,navigation}) => {
+const HeadComp:React.FC<HeaderProps> = ({id,navigation,seteditMode,editMode}) => {
 
     const handleDeleteWord = (Id: number) => {
         deleteWordById(Id, (success) => {
@@ -23,9 +24,14 @@ const HeadComp:React.FC<HeaderProps> = ({id,navigation}) => {
         <Pressable onPress={()=>navigation.navigate('index' as never)}>
             <Ionicons name="arrow-back" size={24} color="black"/>
         </Pressable>
-        <Pressable onPress={()=>handleDeleteWord(id)}>
-            <AntDesign name="delete" size={24} color="black" />
-        </Pressable>
+        <View style={styles.iconContainer}>
+          <Pressable onPress={()=>seteditMode(true)}>
+              <MaterialIcons name="edit" size={24} color={editMode?'white':'black'} />
+          </Pressable>
+          <Pressable onPress={()=>handleDeleteWord(id)}>
+              <MaterialCommunityIcons name="delete-outline" size={24} color="black" />
+          </Pressable>
+        </View>
     </View>
   )
 }
@@ -44,4 +50,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
+    iconContainer: {
+        width: '30%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    }
 })

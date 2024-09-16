@@ -54,6 +54,8 @@ export interface RecordViewProps{
 export interface HeaderProps{
     id:number;
     navigation:StackNavigationProp<RootStackProps, 'index'>;
+    editMode:boolean;
+    seteditMode:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 

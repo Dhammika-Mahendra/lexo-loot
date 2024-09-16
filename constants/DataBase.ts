@@ -107,3 +107,26 @@ import { NavigationProp } from '@react-navigation/native';
       );
     });
   };
+
+  export const editWordById = (id: number, newWord: string, callback: (success: boolean) => void): void => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'UPDATE records SET word = ? WHERE id = ?',
+        [newWord, id],
+        (_, result) => {
+          if (result.rowsAffected > 0) {
+            console.log('Word updated successfully. ID:', id);
+            callback(true);
+          } else {
+            console.log('No word found with ID:', id);
+            callback(false);
+          }
+        },
+        (_, error) => {
+          console.log('Error updating word:', error);
+          callback(false);
+          return false;
+        }
+      );
+    });
+  };
