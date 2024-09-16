@@ -1,20 +1,22 @@
 import { View,ScrollView, StyleSheet, Pressable, Text } from 'react-native'
-import React, { useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState} from 'react'
 import SearchBar from './VocabView/SearchBar'
-import Record from './VocabView/Record'
 import { Colors } from '@/constants/Colors'
 import { SplashScreen } from 'expo-router'
 import { useFonts } from 'expo-font'
 import { useSharedState } from '@/constants/Cntxt'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { IndexProps } from '@/constants/DataTypes'
-import { clearAndPopulateDatabase, initializeDatabase , fetchWords} from '@/constants/DataBase'
+import { IndexProps, record } from '@/constants/DataTypes'
+import {fetchWords} from '@/constants/DataBase'
+import { useFocusEffect } from '@react-navigation/native'
+import Record from './VocabView/Record'
 
 const Index : React.FC<IndexProps>= ({navigation}) => {
 
-    //Data taken from global context
+    //States and global vars
     const {word} = useSharedState()
-
+    const [isLoading, setIsLoading] = useState(true)
+    const [wordList, setWordList] = React.useState<record[]>([])
 
     const [fontsLoaded, error] = useFonts({
         "Roboto-Regular": require('../assets/fonts/Roboto/Roboto-Regular.ttf'),
@@ -25,58 +27,38 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
         "Roboto-Thin": require('../assets/fonts/Roboto/Roboto-Thin.ttf')
     })
 
-    interface Record {
-        id: number;
-        word: string;
-      }
-
-    const [isLoading, setIsLoading] = useState(true)
-    const [wordList, setWordList] = React.useState<Record[]>([])
-
-              // Add sample data
-    const sampleWords = [
-        'DEF',
-        'GHI',
-        'MNO',
-        'PQR',
-        'STU'
-    ];
-      
+    //initial rendering : fonts & splash screen
     useEffect(() => {
-
-      const setupDatabase = async () => {
-        try {
-          setIsLoading(true)
-          console.log("Initializing database...")
-          await initializeDatabase()
-          console.log("Database initialized")
-  
-          console.log("Clearing and populating database...")
-          await clearAndPopulateDatabase(sampleWords)
-          console.log("Database populated")
-  
-          console.log("Fetching words...")
-          const words = await fetchWords()
-          console.log("Words fetched:", words)
-  
-          setWordList(words)
-          setIsLoading(false)
-        } catch (error) {
-          console.error('Error setting up database:', error)
-          setIsLoading(false)
-        }
-      }
-
-        if(error){throw new Error("Fonts not loaded")}
-        if(fontsLoaded){
-            SplashScreen.hideAsync()
-            setupDatabase()
-        }
-
-    console.log('use effect');
+      if(error){throw new Error("Fonts not loaded")}
+      if(fontsLoaded){SplashScreen.hideAsync()}
     },[fontsLoaded, error])
 
     if(!fontsLoaded && !error){return null}
+
+
+    //Fetch words from database 
+    //a usecallback is used to stop function from being recreated on every render
+    const renderWords = useCallback(async() => {
+      try {
+        setIsLoading(true)
+        console.log("Fetching words...")
+        const words = await fetchWords()
+        console.log("Words fetched") 
+        setWordList(words)
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error setting up database:', error)
+        setIsLoading(false)
+      }
+    },[])
+
+    //Fetch words on screen focus
+    useFocusEffect(
+      useCallback(() => {
+        renderWords()
+      }, [renderWords])
+    )
+
 
   return (
     <View style={styles.container}>

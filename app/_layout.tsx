@@ -1,7 +1,7 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -13,9 +13,8 @@ import RecordView from './RecordView';
 import { RootStackProps } from '@/constants/DataTypes';
 import FilterModal from './VocabView/FilterModal';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { insertRecord } from '@/constants/DataBase';
-//import openDatabase from '@/constants/DataBase';
+import { clearAndPopulateDatabase, initializeDatabase } from '@/constants/DataBase';
+import { Text } from 'react-native';
 
 const Stack = createStackNavigator<RootStackProps>();
 
@@ -30,28 +29,32 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
+    
+    const sampleWords = ['DEF','GHI','MNO','PQR','STU']
+    
+    const dbSetup = async () => {
+      try {
+        setIsLoading(true)
+        console.log("Initializing database...")
+        await initializeDatabase()
+        console.log("Database initialized")
+        console.log("Clearing and populating database...")
+        await clearAndPopulateDatabase(sampleWords)
+        console.log("Database populated")
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error setting up database:', error)
+        setIsLoading(false)
+      }
+    }
+
     if (loaded) {
       SplashScreen.hideAsync();
+      dbSetup();
     }
-
-    //First Method------------------------------------>>>>>>>>>>>>>
-
-
-    //Second Method------------------------------------>>>>>>>>>>>>>
-
-/*     const fetchData =async()=>{
-      const db = await openDatabase();
-
-      db.transaction((tx) => {
-        tx.executeSql(
-          'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT);'
-        );
-      });
-
-    }
-
-    fetchData(); */
 
   }, [loaded]);
 
@@ -62,7 +65,8 @@ export default function RootLayout() {
   return (
       <Cntxt>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <Stack.Navigator>
+          {isLoading ? <Text>Loading...</Text>:            
+          <Stack.Navigator>
               <Stack.Screen name="index" component={index} options={{headerStyle:{height:50}}}/>
               <Stack.Screen name="add" component={add} options={{headerStyle:{height:50}}}/>
               <Stack.Screen name="RecordView" component={RecordView} 
@@ -73,7 +77,7 @@ export default function RootLayout() {
                     )
                   }}
               />
-            </Stack.Navigator>
+            </Stack.Navigator>}
             <FilterModal></FilterModal>
         </ThemeProvider>
       </Cntxt>

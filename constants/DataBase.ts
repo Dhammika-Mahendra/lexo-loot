@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite/legacy';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
-import { Record } from './DataTypes';
+import { record } from './DataTypes';
 
 
 // First Method ========================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -47,11 +47,10 @@ import { Record } from './DataTypes';
   };
   
 
-  export const fetchWords = (): Promise<Record[]> => {
+  export const fetchWords = (): Promise<record[]> => {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql('SELECT * FROM records', [], (_, { rows }) => {
-          console.log('Fetched words:', JSON.stringify(rows._array));
           resolve(rows._array);
         });
       }, (error) => {
@@ -62,3 +61,20 @@ import { Record } from './DataTypes';
   };
 
 
+  export const insertWord = (word: string, callback: (success: boolean) => void): void => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'INSERT INTO records (word) VALUES (?)',
+        [word],
+        (_, result) => {
+          console.log('Word inserted successfully:', word);
+          callback(true);
+        },
+        (_, error) => {
+          console.log('Error inserting word:', error);
+          callback(false);
+          return false;
+        }
+      );
+    });
+  };

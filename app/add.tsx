@@ -4,6 +4,7 @@ import { Colors } from '@/constants/Colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { useSharedState } from '@/constants/Cntxt'
 import { useNavigation } from '@react-navigation/native'
+import { insertWord } from '@/constants/DataBase'
 
 const Add = () => {
   const navigate=useNavigation()
@@ -11,17 +12,29 @@ const Add = () => {
   const {word, setWord} = useSharedState()
 
   const [newWord, setNewWord] = React.useState<string>('')
-  const addWord = () => {
+/*   const addWord = () => {
     setWord([...word, newWord])
     setNewWord('')
     navigate.navigate('index' as never)
-  }
+  } */
+
+  const handleAddWord = (Word: string) => {
+    insertWord(Word, (success) => {
+      if (success) {
+        console.log('Word added successfully');
+        navigate.navigate('index' as never)
+      } else {
+        console.log('Failed to add word');
+      }
+    });
+  };
+  
 
   return (
     <View style={styles.container}>
       <Text>Add new word</Text>
       <TextInput onChangeText={(e)=>setNewWord(e)} style={styles.input}></TextInput>
-      <Button title="Add" onPress={addWord}></Button>
+      <Button title="Add" onPress={()=>handleAddWord(newWord)}></Button>
     </View>
   )
 }

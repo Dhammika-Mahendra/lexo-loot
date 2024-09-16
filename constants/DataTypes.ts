@@ -15,7 +15,7 @@ export interface MyDataContextType{
 //Database data types =============================================================
 
 //Record
-export interface Record{
+export interface record{
     id:number;
     word:string;
 }
