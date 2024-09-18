@@ -1,4 +1,4 @@
-import { View,ScrollView, StyleSheet, Pressable, Text } from 'react-native'
+/* import { View,ScrollView, StyleSheet, Pressable, Text } from 'react-native'
 import React, { useCallback, useEffect, useState} from 'react'
 import SearchBar from './VocabView/SearchBar'
 import { Colors } from '@/constants/Colors'
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
     buttonText:{
         fontSize: 40
     }
-})
+}) */
