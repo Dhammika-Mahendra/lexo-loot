@@ -1,7 +1,7 @@
-/* import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
 import React from 'react'
 import { RecordViewProps } from '@/constants/DataTypes'
-import HeadComp from './Header/HeadComp'
+import HeadComp from './../Header/HeadComp'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { editWordById } from '@/constants/DataBase'
 
@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default RecordView */
+export default RecordView

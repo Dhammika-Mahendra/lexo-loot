@@ -1,12 +1,11 @@
-import { View, Text } from 'react-native'
 import React from 'react'
+import AccountPage from '@/components/AccountFolder/AccountPage'
+import { Text, View } from 'react-native'
 
-const account = () => {
+const Account = () => {
   return (
-    <View>
-      <Text>account</Text>
-    </View>
+    <AccountPage />
   )
 }
 
-export default account
+export default Account

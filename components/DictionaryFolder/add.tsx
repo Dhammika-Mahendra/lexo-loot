@@ -1,4 +1,4 @@
-/* import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
 import React from 'react'
 import { Colors } from '@/constants/Colors'
 import { TextInput } from 'react-native-gesture-handler'
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
       marginBottom:10,
       marginTop:10
     }
-}) */
+})

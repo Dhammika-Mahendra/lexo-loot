@@ -1,21 +1,24 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import React from 'react';
-import { Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Drawer } from 'expo-router/drawer';
+//import { Drawer } from 'expo-router/drawer';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Text } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Account from './account';
+import Settings from './settings';
+import Dictionary from './dictionary';
 
+const Drawer = createDrawerNavigator();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 
-  const colorScheme = useColorScheme();
 
   const [loaded] = useFonts({
     SpaceMono: require('./../assets/fonts/SpaceMono-Regular.ttf'),
@@ -34,30 +37,21 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-    <Drawer>
-      <Drawer.Screen
-        name="settings" // This is the name of the page and must match the url from root
-        options={{
-          drawerLabel: 'settings',
-          title: 'overview',
-        }}
-      />
-{      <Drawer.Screen
-        name="account" // This is the name of the page and must match the url from root
-        options={{
-          drawerLabel: 'account',
-          title: 'overview',
-        }}
-      />}
-{      <Drawer.Screen
-        name="dictionary" // This is the name of the page and must match the url from root
-        options={{
-          drawerLabel: 'dictionary',
-          title: 'overview',
-        }}
-      />}
-    </Drawer>
-  </GestureHandlerRootView>
+ <SafeAreaProvider>
+       <Drawer.Navigator>
+       <Drawer.Screen
+           name="account" // This is the name of the page and must match the url from root
+           component={Account}
+         />
+       <Drawer.Screen
+           name="settings" // This is the name of the page and must match the url from root
+           component={Settings}
+         />
+       <Drawer.Screen
+           name="dictionary" // This is the name of the page and must match the url from root
+           component={Dictionary}
+         />
+       </Drawer.Navigator>
+ </SafeAreaProvider>
   );
 }

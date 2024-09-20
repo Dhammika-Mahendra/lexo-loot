@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const dictionary = () => {
+const SettingsPage = () => {
   return (
     <View>
-      <Text>dictionary</Text>
+      <Text>SettingsPage</Text>
     </View>
   )
 }
 
-export default dictionary
+export default SettingsPage
 
 const styles = StyleSheet.create({})
