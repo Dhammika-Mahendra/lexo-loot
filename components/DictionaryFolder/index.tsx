@@ -41,8 +41,7 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
 
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
       <SearchBar></SearchBar>
         <ScrollView>
           {isLoading ? <View><Text>Loading...</Text></View> :
@@ -58,8 +57,7 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
               <FontAwesome6 name="add" size={24} color="white" />
               </View>
           </Pressable>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
   )
 }
 
@@ -78,9 +76,9 @@ const styles = StyleSheet.create({
         right: 20,
         backgroundColor: Colors.main.add,
         padding: 10,
-        width: 50, 
-        height: 50,
-        borderRadius: 25,
+        width: 60, 
+        height: 60,
+        borderRadius: 30,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'

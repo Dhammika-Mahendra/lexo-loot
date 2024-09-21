@@ -7,7 +7,7 @@ import { deleteWordById } from '@/constants/DataBase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const HeadComp:React.FC<HeaderProps> = ({id,navigation,seteditMode,editMode}) => {
+const RecordViewHeader:React.FC<HeaderProps> = ({id,navigation,seteditMode,editMode}) => {
 
     const handleDeleteWord = (Id: number) => {
         deleteWordById(Id, (success) => {
@@ -36,7 +36,7 @@ const HeadComp:React.FC<HeaderProps> = ({id,navigation,seteditMode,editMode}) =>
   )
 }
 
-export default HeadComp
+export default RecordViewHeader
 
 
 const styles = StyleSheet.create({

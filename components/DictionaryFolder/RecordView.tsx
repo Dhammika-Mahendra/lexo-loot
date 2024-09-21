@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
 import React from 'react'
 import { RecordViewProps } from '@/constants/DataTypes'
-import HeadComp from './../Header/HeadComp'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { editWordById } from '@/constants/DataBase'
+import RecordViewHeader from '../Header/RecordViewHeader'
 
 const RecordView :React.FC<RecordViewProps>= ({route,navigation}) => {
 
@@ -26,8 +26,7 @@ const RecordView :React.FC<RecordViewProps>= ({route,navigation}) => {
 
   return (
     <SafeAreaView>
-      <View>
-        <HeadComp id={elem.id} navigation={nav} seteditMode={setEditMode} editMode={editmode}></HeadComp>
+        <RecordViewHeader id={elem.id} navigation={nav} seteditMode={setEditMode} editMode={editmode}></RecordViewHeader>
         {!editmode ?
           <View>
             <Text>Id:{elem.id}</Text>
@@ -38,7 +37,6 @@ const RecordView :React.FC<RecordViewProps>= ({route,navigation}) => {
             <Button title="Save" onPress={()=>handleEditWord(elem.id,text)}></Button>
           </View>
           }
-      </View>
     </SafeAreaView>
   )
 }

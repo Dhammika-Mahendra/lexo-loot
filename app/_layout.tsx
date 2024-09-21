@@ -11,6 +11,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Account from './account';
 import Settings from './settings';
 import Dictionary from './dictionary';
+import { Cntxt } from '@/constants/Cntxt';
 
 const Drawer = createDrawerNavigator();
 
@@ -37,21 +38,22 @@ export default function RootLayout() {
   }
 
   return (
- <SafeAreaProvider>
+ <Cntxt>
        <Drawer.Navigator>
        <Drawer.Screen
-           name="account" // This is the name of the page and must match the url from root
+           name="account" 
            component={Account}
          />
        <Drawer.Screen
-           name="settings" // This is the name of the page and must match the url from root
+           name="settings" 
            component={Settings}
          />
        <Drawer.Screen
-           name="dictionary" // This is the name of the page and must match the url from root
+           name="dictionary" 
            component={Dictionary}
+           options={{headerShown: false}}
          />
        </Drawer.Navigator>
- </SafeAreaProvider>
+ </Cntxt>
   );
 }
