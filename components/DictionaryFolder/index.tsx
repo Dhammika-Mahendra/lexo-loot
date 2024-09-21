@@ -1,40 +1,19 @@
 import { View,ScrollView, StyleSheet, Pressable, Text } from 'react-native'
 import React, { useCallback, useEffect, useState} from 'react'
-import SearchBar from './VocabView/SearchBar'
+import SearchBar from './../VocabView/SearchBar'
 import { Colors } from '@/constants/Colors'
-import { SplashScreen } from 'expo-router'
-import { useFonts } from 'expo-font'
-import { useSharedState } from '@/constants/Cntxt'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { IndexProps, record } from '@/constants/DataTypes'
 import {fetchWords} from '@/constants/DataBase'
 import { useFocusEffect } from '@react-navigation/native'
-import Record from './VocabView/Record'
+import Record from './../VocabView/Record'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Index : React.FC<IndexProps>= ({navigation}) => {
 
     //States and global vars
-    const {word} = useSharedState()
     const [isLoading, setIsLoading] = useState(true)
     const [wordList, setWordList] = React.useState<record[]>([])
-
-    const [fontsLoaded, error] = useFonts({
-        "Roboto-Regular": require('../assets/fonts/Roboto/Roboto-Regular.ttf'),
-        "Roboto-Bold": require('../assets/fonts/Roboto/Roboto-Bold.ttf'),
-        "Roboto-Light": require('../assets/fonts/Roboto/Roboto-Light.ttf'),
-        "Roboto-Black": require('../assets/fonts/Roboto/Roboto-Black.ttf'),
-        "Roboto-Medium": require('../assets/fonts/Roboto/Roboto-Medium.ttf'),
-        "Roboto-Thin": require('../assets/fonts/Roboto/Roboto-Thin.ttf')
-    })
-
-    //initial rendering : fonts & splash screen
-    useEffect(() => {
-      if(error){throw new Error("Fonts not loaded")}
-      if(fontsLoaded){SplashScreen.hideAsync()}
-    },[fontsLoaded, error])
-
-    if(!fontsLoaded && !error){return null}
 
 
     //Fetch words from database 
@@ -62,8 +41,7 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
 
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
       <SearchBar></SearchBar>
         <ScrollView>
           {isLoading ? <View><Text>Loading...</Text></View> :
@@ -79,8 +57,7 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
               <FontAwesome6 name="add" size={24} color="white" />
               </View>
           </Pressable>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
   )
 }
 
@@ -99,9 +76,9 @@ const styles = StyleSheet.create({
         right: 20,
         backgroundColor: Colors.main.add,
         padding: 10,
-        width: 50, 
-        height: 50,
-        borderRadius: 25,
+        width: 60, 
+        height: 60,
+        borderRadius: 30,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'

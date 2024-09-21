@@ -25,9 +25,16 @@ export interface record{
 
 //Stack screens
 export interface RootStackProps{
+    home:undefined;
     index:undefined;
     add:undefined;
     RecordView:{elem:record,nav:StackNavigationProp<RootStackProps, 'index'>};
+    [key: string]: undefined | object;
+}
+export interface TempRootStackProps{
+    AComp:undefined;
+    BComp:undefined;
+    CComp:undefined;
     [key: string]: undefined | object;
 }
 
