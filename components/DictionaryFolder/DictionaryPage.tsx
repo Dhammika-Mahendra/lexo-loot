@@ -16,7 +16,14 @@ const DictionaryPage = () => {
 
   useEffect(() => {
 
-  const sampleWords = ['DEF','GHI','MNO','PQR','STU']
+  const sampleWords = [
+    {word:'Abate',meaning:'to reduce in amount, degree, or severity',category:'Verb'},
+    {word:'Aberrant',meaning:'deviating from the norm',category:'Adjective'},
+    {word:'Abeyance',meaning:'temporary suppression or suspension',category:'Noun'},
+    {word:'Abscond',meaning:'to leave hurriedly and secretly',category:'Verb'},
+    {word:'Abstemious',meaning:'sparing in eating and drinking',category:'Adjective'},
+    {word:'Admonish',meaning:'to caution or advise against something',category:'Verb'}
+  ]
     
   const dbSetup = async () => {
     try {

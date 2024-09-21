@@ -15,9 +15,13 @@ export interface MyDataContextType{
 //Database data types =============================================================
 
 //Record
+export type cat =string[]
+
 export interface record{
     id:number;
     word:string;
+    meaning:string;
+    category:string;
 }
 
 

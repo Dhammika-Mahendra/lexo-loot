@@ -10,5 +10,10 @@ export const textStyles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'regular',
     color: 'black'  
+  },
+  recordSubtitle:{
+    fontSize: 16,
+    fontWeight: 'regular',
+    color: 'gray'
   }
 });
