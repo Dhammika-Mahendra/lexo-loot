@@ -14,7 +14,7 @@ import { NavigationProp } from '@react-navigation/native';
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
-          'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT)'
+          'CREATE TABLE IF NOT EXISTS records2 (id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT , meaning TEXT, category TEXT);'
         );
       }, (error) => {
         console.log('Error creating table:', error);
@@ -26,16 +26,18 @@ import { NavigationProp } from '@react-navigation/native';
     });
   }
  
+  type sampleW = {word:string,meaning:string,category:string}[]
 
-  export const clearAndPopulateDatabase = (sampleWords: string[]): Promise<void> => {
+  export const clearAndPopulateDatabase = (sampleWords: sampleW): Promise<void> => {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         // Clear existing records
-        tx.executeSql('DELETE FROM records');
+        tx.executeSql('DELETE FROM records2');
   
         // Insert sample words
         sampleWords.forEach(item => {
-          tx.executeSql('INSERT INTO records (word) VALUES (?)', [item]);
+          tx.executeSql('INSERT INTO records2 (word, meaning, category) VALUES (?, ?, ?)', 
+          [item.word, item.meaning, item.category]);
         });
       }, (error) => {
         console.log('Error populating database:', error);
@@ -55,7 +57,7 @@ import { NavigationProp } from '@react-navigation/native';
   export const fetchWords = (): Promise<record[]> => {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM records', [], (_, { rows }) => {
+        tx.executeSql('SELECT * FROM records2', [], (_, { rows }) => {
           resolve(rows._array);
         });
       }, (error) => {
@@ -66,13 +68,15 @@ import { NavigationProp } from '@react-navigation/native';
   };
 
 
-  export const insertWord = (word: string, callback: (success: boolean) => void): void => {
+  type itm = {word:string,meaning:string,category:string}
+
+  export const insertWord = (item: itm, callback: (success: boolean) => void): void => {
     db.transaction(tx => {
       tx.executeSql(
-        'INSERT INTO records (word) VALUES (?)',
-        [word],
+        'INSERT INTO records2 (word,meaning, category) VALUES (?, ?, ?)',
+        [item.word,item.meaning,item.category],
         (_, result) => {
-          console.log('Word inserted successfully:', word);
+          console.log('Word inserted successfully:');
           callback(true);
         },
         (_, error) => {
@@ -88,7 +92,7 @@ import { NavigationProp } from '@react-navigation/native';
   export const deleteWordById = (id: number, callback: (success: boolean) => void): void => {
     db.transaction(tx => {
       tx.executeSql(
-        'DELETE FROM records WHERE id = ?',
+        'DELETE FROM records2 WHERE id = ?',
         [id],
         (_, result) => {
           if (result.rowsAffected > 0) {
@@ -108,11 +112,11 @@ import { NavigationProp } from '@react-navigation/native';
     });
   };
 
-  export const editWordById = (id: number, newWord: string, callback: (success: boolean) => void): void => {
+  export const editWordById = (id: number, item:itm, callback: (success: boolean) => void): void => {
     db.transaction(tx => {
       tx.executeSql(
-        'UPDATE records SET word = ? WHERE id = ?',
-        [newWord, id],
+        'UPDATE records2 SET word = ?, meaning = ?, category = ? WHERE id = ?',
+        [item.word, item.meaning, item.category, id],
         (_, result) => {
           if (result.rowsAffected > 0) {
             console.log('Word updated successfully. ID:', id);

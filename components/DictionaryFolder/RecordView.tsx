@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RecordViewProps } from '@/constants/DataTypes'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { editWordById } from '@/constants/DataBase'
 import RecordViewHeader from '../Header/RecordViewHeader'
+import { textStyles } from '@/constants/TextStyles'
 
 const RecordView :React.FC<RecordViewProps>= ({route,navigation}) => {
 
@@ -13,7 +14,7 @@ const RecordView :React.FC<RecordViewProps>= ({route,navigation}) => {
   const [editmode,setEditMode] = React.useState<boolean>(false);
   const [text,setText] = React.useState<string>(elem.word);
 
-  const handleEditWord = (Id: number, value : string) => {
+/*   const handleEditWord = (Id: number, value : string) => {
     editWordById(Id, value, (success) => {
       if (success) {
         console.log('Success');
@@ -22,21 +23,23 @@ const RecordView :React.FC<RecordViewProps>= ({route,navigation}) => {
         console.log('Fail');
       }
     });
-  }
+  } */
+
+  useEffect(()=>{
+    if(editmode){
+      navigation.navigate('add',{elem:elem})
+    }
+  },[editmode])
 
   return (
     <SafeAreaView>
         <RecordViewHeader id={elem.id} navigation={nav} seteditMode={setEditMode} editMode={editmode}></RecordViewHeader>
-        {!editmode ?
           <View>
             <Text>Id:{elem.id}</Text>
-            <Text>This is {elem.word}</Text>
-          </View>:
-          <View>
-            <TextInput value={text} onChangeText={(e)=>setText(e)} style={styles.inputStyle}></TextInput>
-            <Button title="Save" onPress={()=>handleEditWord(elem.id,text)}></Button>
+            <Text style={textStyles.recordTitle} >{elem.word}</Text>
+            <Text style={textStyles.recordSubtitle} >{elem.meaning}</Text>
+            <Text style={textStyles.recordSubtitle} >{elem.category}</Text>
           </View>
-          }
     </SafeAreaView>
   )
 }

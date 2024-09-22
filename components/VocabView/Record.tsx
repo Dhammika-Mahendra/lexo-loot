@@ -10,6 +10,7 @@ const Record: React.FC<RecordProps> = ({element,navigation}) => {
         <Pressable onPress={()=>navigation.navigate('RecordView',{elem:element,nav:navigation})} >
             <View style={styles.Record}>
                 <Text style={textStyles.recordTitle} >{element.word}</Text>
+                <Text style={textStyles.recordSubtitle} >{element.category}</Text>
             </View>
         </Pressable>
     );

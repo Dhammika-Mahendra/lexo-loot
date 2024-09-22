@@ -13,6 +13,7 @@ const RecordViewHeader:React.FC<HeaderProps> = ({id,navigation,seteditMode,editM
         deleteWordById(Id, (success) => {
           if (success) {
             console.log('Success');
+            navigation.navigate('index' as any)
           } else {
             console.log('Fail');
           }
