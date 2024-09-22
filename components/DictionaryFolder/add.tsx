@@ -3,20 +3,27 @@ import React from 'react'
 import { Colors } from '@/constants/Colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
-import { insertWord } from '@/constants/DataBase'
+import { editWordById, insertWord } from '@/constants/DataBase'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { AddProps } from '@/constants/DataTypes'
 
 //checkbox catergories data
 
 const categoryData: string[] = ['Noun', 'Verb', 'Adjective', 'Adverb'];
 
-const Add = () => {
+const Add:React.FC<AddProps> = ({route}) => {
   const navigate=useNavigation()
 
+  const {elem} = route.params
+
+  const stringToArray = (input: string): string[] => {
+    return input.split('|');
+  };
+
   //Form data states -------------------------------------->>>>>>>>>>>>>>>
-  const [newWord, setNewWord] = React.useState<string>('')
-  const [meaning, setMeaning] = React.useState<string>('')
-  const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);//selected catergories
+  const [newWord, setNewWord] = React.useState<string>(elem.word)
+  const [meaning, setMeaning] = React.useState<string>(elem.meaning)
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(stringToArray(elem.category))
 
   const handleCategoryChange = (category: string) => {
     if (selectedCategories.includes(category)) { 
@@ -36,7 +43,7 @@ const Add = () => {
     return arr.join('|');
   };
 
-  const handleAddWord = () => {
+  const handleWord = () => {
 
     let obj = {
       word: newWord,
@@ -44,14 +51,27 @@ const Add = () => {
       category: arrayToString(selectedCategories)
     }
 
-    insertWord(obj, (success) => {
-      if (success) {
-        console.log('Word added successfully');
-        navigate.navigate('index' as never)
-      } else {
-        console.log('Failed to add word');
-      }
-    });
+    if(elem.id==0){//Adding new record ------------------------>>>>>>>>>>
+      insertWord(obj, (success) => {
+        if (success) {
+          console.log('Word added successfully');
+          navigate.navigate('index' as never)
+        } else {
+          console.log('Failed to add word');
+        }
+      });
+    }else{//Edit existing record -------------------------->>>>>>>>>>>>>>
+      editWordById(elem.id,obj,(success)=>{
+        if (success) {
+          console.log('Word edited successfully');
+          navigate.navigate('index' as never)
+        } else {
+          console.log('Failed to edit word');
+        }
+      })
+    }
+
+
   };
   
 
@@ -59,13 +79,13 @@ const Add = () => {
     <SafeAreaView>
       <View style={styles.container}>
         <Text>Add new word</Text>
-        <TextInput onChangeText={(e)=>setNewWord(e)} style={styles.input}></TextInput>
+        <TextInput onChangeText={(e)=>setNewWord(e)} style={styles.input} value={newWord}></TextInput>
         <Text>Meaning</Text>
-        <TextInput onChangeText={(e)=>setMeaning(e)} style={styles.input}></TextInput>
+        <TextInput onChangeText={(e)=>setMeaning(e)} style={styles.input} value={meaning}></TextInput>
 
 
         {/*-------- Catergory checkbox ------------------*/}
-        <Text>Catergory</Text>
+        <Text>Category</Text>
         <FlatList
         data={categoryData}
         keyExtractor={(item) => item}
@@ -82,7 +102,7 @@ const Add = () => {
         )}
       />
 
-        <Button title="Add" onPress={()=>handleAddWord()}></Button>
+        <Button title={elem.id!=0?'Save':'Add'} onPress={()=>handleWord()}></Button>
       </View>
     </SafeAreaView>
   )

@@ -29,22 +29,20 @@ export interface record{
 
 //Stack screens
 export interface RootStackProps{
-    home:undefined;
     index:undefined;
-    add:undefined;
+    add:{elem:record};
     RecordView:{elem:record,nav:StackNavigationProp<RootStackProps, 'index'>};
-    [key: string]: undefined | object;
-}
-export interface TempRootStackProps{
-    AComp:undefined;
-    BComp:undefined;
-    CComp:undefined;
     [key: string]: undefined | object;
 }
 
 //Index.home screen
 export interface IndexProps{
     navigation:StackNavigationProp<RootStackProps, 'index'>;
+}
+
+//Add.screen
+export interface AddProps{
+    route:RouteProp<RootStackProps, 'add'>;
 }
 
 //Record component

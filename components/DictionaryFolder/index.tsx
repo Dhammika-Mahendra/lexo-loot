@@ -52,7 +52,7 @@ const Index : React.FC<IndexProps>= ({navigation}) => {
               })
           }
         </ScrollView>
-          <Pressable onPress={() => navigation.navigate('add' as never)}>
+          <Pressable onPress={() => navigation.navigate('add',{elem:{id:0,word:'',meaning:'',category:''}})}>
               <View style ={styles.button}>
               <FontAwesome6 name="add" size={24} color="white" />
               </View>
